@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %} | Company {% endblock %}
+{% block content %}
+
+
+<div class="pagetitle">
+    <h1>Administrator Page</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active">Applications</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-6">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Applicant Details</h5>
+
+            <!-- Applicant Table -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Position</th>
+                  <th scope="col">Attached CV</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Brandon Jacob</td>
+                  <td>Designer</td>
+                  <td><button class="button-job-apply"><a href="applications.html">Open CV</a></button></td>
+                  <td>2016-05-25</td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- End Applicant Table -->
+          </div>
+        </div>
+
+      </div>  
+
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Applicants Status</h5>
+
+            <!-- Status Table -->
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Position</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Option</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Brandon Jacob</td>
+                  <td>Designer</td>
+                  <td>
+                    <form action="">
+                      <select name="status" class="f-selector" id="appl_stats" size="">
+                        <option value="passed">Passed</option>
+                        <option value="pending" selected>Pending</option>
+                        <option value="failed">Failed</option>>
+                      </select>
+                    </form>
+                  </td>
+                  <td><button class="button-job-apply"><a href="applications.html">Submit</a></button></td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- End Status Table -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+{% endblock %}

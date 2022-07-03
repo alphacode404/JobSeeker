@@ -3,20 +3,19 @@ from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 
 
-from .models import Applicant, Profile
+from .models import Profile
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        # group = Group.objects.get(name='Applicant')
-        # instance.groups.add(group)
-
-        # Profile.objects.create(
-        #     user=instance,
-        #     name=instance.username,
-        #     )
+        group = Group.objects.get(name='applicant')
+        instance.groups.add(group)
 
         Profile.objects.create(user=instance)
+
+        print('profile created')
+
+
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):

@@ -2,7 +2,7 @@ from email.headerregistry import Group
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
-from .models import Applicant, Job, Profile
+from .models import Applicant, Job, Note, Profile
 
 from .forms import ProfileForm, RegisterForm
 from django.contrib import messages
@@ -31,7 +31,13 @@ def about(request):
 @login_required(login_url='login')
 # @allowed_users(allowed_roles=[])
 def dashboard(request):
-    return render(request, 'pages/dashboard.html')
+    passed = Job.objects.all().count
+
+
+    context = {
+        
+    }
+    return render(request, 'pages/dashboard.html', context)
 
 
 @unathenticated_user
@@ -43,6 +49,13 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
+
+            # group = Group.objects.get(name='applicant')
+            # user.group.add(group)
+
+            # Profile.objects.create(user=user, 
+            # name=user.username, )
+
             messages.success(request, f'Account creation for {username} was successful')
             return redirect('login')
 
@@ -79,7 +92,7 @@ def loginuser(request):
 
 @login_required(login_url='login')
 def company(request):
-    return render(request, 'pages/company.html')
+    return render(request, 'pages/company-index.html')
 
 
 @login_required(login_url='login')
@@ -115,11 +128,62 @@ def note(request):
     return render(request, 'pages/note.html')
 
 
+
+
+@login_required(login_url='login')
+def applied(request):
+    return render(request, 'pages/applied.html')
+
+
+
 def logoutuser(request):
     logout(request)
     return redirect('login')
 
 
 
+def note(request):
+    notes = Note.objects.filter(user=request.user).order_by('-date')
+
+    context = {
+        'notes': notes
+    }
+    
+    return render(request, 'pages/note.html', context)
+
+def noteupdate(request):
+
+    if request.method == "POST":
+        company = request.POST['company']
+        position = request.POST['position']
+        date = request.POST['date']
+        text = request.POST['text']
+        document = request.FILES['document']
+
+        new_note = Note(company=company, position=position, date=date, text=text, document=document)
+        new_note.user = request.user
+        new_note.save()
+
+        messages.success(request, "Note was successfully added")
+        print(new_note)
+        return redirect('note')
+
+    
+    return render(request, 'pages/note.html')
+
+
+
+def notedelete(request, pk):
+
+    note = Note.objects.get(id=pk)
+    if request.method == "POST":
+        note.delete()
+        return redirect('note')
+
+    context = {
+        'note':note
+    }
+
+    return render(request, 'pages/deletenote.html', context)
 
 

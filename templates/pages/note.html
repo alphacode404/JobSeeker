@@ -1,137 +1,110 @@
 {% extends 'base.html' %}
 
+{% block title %} | Note {% endblock %}
+
 {% block content %}
-
-
 <div class="pagetitle">
-    <h1>Interview Notes</h1>
-    <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-        <li class="breadcrumb-item active">Interview Notes</li>
-      </ol>
-    </nav>
-  </div><!-- End Page Title -->
+  <h1>Interview Notes</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'login' %}">Home</a></li>
+      <li class="breadcrumb-item active">Interview Notes</li>
+    </ol>
+  </nav>
+</div><!-- End Page Title -->
 
-  <section class="section faq">
-    <div class="row">
+<section class="section faq">
+  <div class="row">
 
 
-      <div class="col-lg-6">
+    <div class="col-lg-6">
 
-        <div class="card basic">
-          <div class="card-body">
-            <h5 id="notes" class="card-title">Notes</h5>
-
-            <div>
-              <table class="table table-borderless">
-                <tbody>
-                  <tr>
-                    <th scope="row"><a href="#">Google</a></th>
-                    <td>Systems Analyst</td>
-                    <td>yy/mm/dd</td>
-                  </tr>
-                </tbody>
-              </table>
-              
-              <p>Saepe perspiciatis ea. Incidunt blanditiis enim mollitia qui voluptates. Id rem nulla tenetur nihil in unde rerum. Quae consequatur placeat qui cumque earum eius omnis quos.</p>
-
-              <button class="button-job-view" disabled ><a href="#">Download Attachments</a></button>
-              <button class="button-job-remove" disabled >Delete Note</button>
-            </div>
-
-            <hr>
-
-            <div class="pt-2">
-              <table class="table table-borderless">
-                <tbody>
-                  <tr>
-                    <th scope="row"><a href="#">Google</a></th>
-                    <td>Systems Analyst</td>
-                    <td>yy/mm/dd</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <p>Id ipsam non ut. Placeat doloremque deserunt quia tenetur inventore laboriosam dolores totam odio. Aperiam incidunt et. Totam ut quos sunt atque modi molestiae dolorem.</p>
-
-              <button class="button-job-view" disabled ><a href="#">Download Attachments</a></button>
-              <button class="button-job-remove" disabled >Delete Note</button>
-            </div>
-
-            <hr>
-
-            <div class="pt-2">
-              <table class="table table-borderless">
-                <tbody>
-                  <tr>
-                    <th scope="row"><a href="#">Google</a></th>
-                    <td>Systems Analyst</td>
-                    <td>yy/mm/dd</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <p>Enim inventore in consequuntur ipsam voluptatem consequatur beatae. Nostrum consequuntur voluptates et blanditiis.</p>
-
-              <button class="button-job-view" disabled ><a href="#">Download Attachments</a></button>
-              <button class="button-job-remove" disabled >Delete Note</button>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      <div class="col-lg-6">
-
-        <!-- Submit Note -->
-        <div class="card">
-          <div class="card-body">
-
-            <h5 id="newnote" class="card-title">New Note</h5>
-
+      <div class="card basic">
+        <div class="card-body">
+          <h5 id="notes" class="card-title">Notes</h5>
+          {% if notes %}
+            {% for note in notes %}
+          <div>
             <table class="table table-borderless">
               <tbody>
                 <tr>
-                  <th scope="row">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Company">
-                  </th>
-                  <td>
-                    <input type="text" class="form-control" id="floatingName" placeholder="Job Title">
-                  </td>
-                  <td>
-                    <input type="date" class="form-control" id="floatingDate">
-                  </td>
+                  <th scope="row"><a href="#">{{ note.company }}</a></th>
+                  <td> {{ note.position }}</td>
+                  <td> {{ note.date }}</td>
                 </tr>
               </tbody>
             </table>
-
-            <div style="margin-bottom: 10px;" class="form-floating">
-              <textarea class="form-control" placeholder="" id="floatingTextarea" style="height: 250px;"></textarea>
-              <label for="floatingTextarea">Write a Note...</label>
-            </div>
-
-            <h5 class="card-title">Upload Interview Material</h5>
             
-            <div style="margin-bottom: 15px;" class="col-md-12">
-              <div class="form-floating">
-                <input type="file" class="form-control" id="floatingFile">
-              </div>
-            </div>
+            <p> {{ note.text }}</p>
 
-            <div class="text-center">
-              <button class="button-job-note"><a href="#">Submit</a></button>
-            </div>
-
-
+            {% if note.document %}
+            <button class="button-job-view"><a href=" {{ note.document.url }}" downlaod>Download Attachments</a></button>
+            {% else %}
+            <p>No document attached to this Note</p>
+            {% endif %}
+            <button class="button-job-remove" ><a href="{% url 'notedelete' note.id %}"> Delete Note</a></button>
           </div>
-        </div><!-- End Suubmit Note -->
 
+          <hr>
+          {% endfor %}
+          {% else %}
+          <p>No notes attached</p>
+          {% endif %}
+        </div>
       </div>
 
     </div>
-  </section>
 
+    <div class="col-lg-6">
+
+      <!-- Submit Note -->
+      <div class="card">
+        <div class="card-body">
+
+          <h5 id="newnote" class="card-title">New Note</h5>
+
+          <form action="{% url 'noteupdate' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <input name='company' type="text" class="form-control" id="floatingName" placeholder="Company">
+                </th>
+                <td>
+                  <input name='position' type="text" class="form-control" id="floatingName" placeholder="Job Title">
+                </td>
+                <td>
+                  <input name="date" type="date" class="form-control" id="floatingDate">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-bottom: 10px;" class="form-floating">
+            <textarea name="text" class="form-control" placeholder="" id="floatingTextarea" style="height: 250px;"></textarea>
+            <label for="floatingTextarea">Write a Note...</label>
+          </div>
+
+          <h5 class="card-title">Upload Interview Material</h5>
+          
+          <div style="margin-bottom: 15px;" class="col-md-12">
+            <div class="form-floating">
+              <input name="document" type="file" class="form-control" id="floatingFile">
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button class="button-job-note">Submit</button>
+          </div>
+
+          </form>
+        </div>
+      </div><!-- End Suubmit Note -->
+
+    </div>
+
+  </div>
+</section>
 
 {% endblock %}

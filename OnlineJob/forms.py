@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Profile
+from .models import Profile, Note
 
 
 
@@ -32,3 +32,8 @@ class ProfileForm(forms.ModelForm):
             'occupation': forms.TextInput(attrs={'class': 'form-control'}),
             'city': forms.TextInput(attrs={'class': 'form-control'})
         }
+
+
+class NoteForm(forms.ModelForm):
+    model = Note
+    fields = ('company', 'position', 'date', 'text', 'document')

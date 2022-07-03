@@ -72,10 +72,7 @@ class Applicant(models.Model):
     name = models.CharField(max_length=200)
     dob = models.DateField('Date of Birth')
     job = models.ManyToManyField(Job, related_name='applicant')
-
-
-
-
+    document = models.FileField(upload_to='resume', null=True)
 
     class Meta:
         verbose_name='Applicant'
@@ -85,4 +82,23 @@ class Applicant(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class Note(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.CharField(max_length=200, default='')
+    position = models.CharField(max_length=200, default='')
+    date = models.DateTimeField(auto_now=True)
+    text = models.TextField(default='')
+    document = models.FileField(upload_to='documents/%Y%m%d', blank=True)
+
+
+    class Meta:
+        verbose_name = "Note"
+        verbose_name_plural = 'Notes'
+
+
+    def __str__(self):
+        return str(self.user)
 
