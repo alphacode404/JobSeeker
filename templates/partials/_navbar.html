@@ -1,0 +1,63 @@
+{% load static %}
+
+
+  {% if user.is_authenticated %}
+  <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button class="button-job-remove">logout</button>
+  </form>
+
+<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+  <img src="{{ request.user.profile.profile_pic.url }}" alt="Profile" class="rounded-circle">
+  <span style="margin-right: 10px;"class="d-none d-md-block dropdown-toggle ps-2"> Welcome {{ request.user.username }}</span>
+</a><!-- End Profile Image Icon -->   
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+      <li class="dropdown-header">
+        <h6>{{ request.user.username }}</h6>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+          <i class="bi bi-person"></i>
+          <span>My Profile</span>
+        </a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{% url 'profile' %}">
+          <i class="bi bi-gear"></i>
+          <span>Account Settings</span>
+        </a>
+      </li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center" href="{%  url 'logout' %}">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Sign Out</span>
+        </a>
+      </li>
+    </ul><!-- End Profile Dropdown Items -->
+    </li>
+  {% else %}
+     <a href="{% url 'register' %}">
+      <span style="padding-right: 20px; background-color: rgb(235, 183, 183); font-size: larger; color: red; border-radius:3px; padding-left: 15px; margin-right: 2px;"> Sign up</span>
+     </a>
+
+     <a href="{% url 'login' %}">
+      <span style="padding-right: 20px; background-color: rgb(6, 157, 184); font-size: larger; color: white; border-radius:3px; padding-left: 15px; margin-right: 2px;"> Login</span>
+     </a>
+  {% endif %}
+
+ 
+
+</ul>
+</nav><!-- End Icons Navigation -->
