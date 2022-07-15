@@ -52,8 +52,7 @@
                       <td>{{ job.name }}</td>
                       <td>${{job.salary }}/yr</td>
                         <td>
-                          <button class="button-job-apply"><a href="applications.html">Apply</a></button>
-                          
+                          <button class="button-job-apply"><a href=" {% url 'jobdetail' job.id %}">Apply</a></button> 
                         </td>
                     </tr>
                       {% endfor %}

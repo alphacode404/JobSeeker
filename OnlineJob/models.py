@@ -1,5 +1,7 @@
+from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django_countries.fields import CountryField
 
 
@@ -16,10 +18,10 @@ class Profile(models.Model):
     email = models.EmailField(default='')
     biography = models.CharField(max_length=500, default='')
     country = CountryField('Country', blank_label='(select country)', null=True)
-    twitter = models.CharField(max_length=500, default='')
-    instagram = models.CharField(max_length=500, default='')
-    linkedin = models.CharField(max_length=500, default='')
-    facebook = models.CharField(max_length=500, default='')
+    twitter = models.CharField(max_length=500, default='', blank=True)
+    instagram = models.CharField(max_length=500, default='', blank=True)
+    linkedin = models.CharField(max_length=500, default='', blank=True)
+    facebook = models.CharField(max_length=500, default='', blank=True)
     employment_status = models.CharField(max_length=200, choices=EMPLOYMENT_STATUS, default=EMPLOYMENT_STATUS[:0])
     occupation = models.CharField(max_length=200, default='')
     city = models.CharField(max_length=200, default='')
@@ -64,24 +66,48 @@ class Job(models.Model):
     def __str__(self):
         return self.name
 
-
-
+    # def get_absolute_url(self):
+    #     return reverse('job:detail', kwargs={
+    #         'job_pk': self.id
+    #     })
 
 
 class Applicant(models.Model):
-    name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     dob = models.DateField('Date of Birth')
-    job = models.ManyToManyField(Job, related_name='applicant')
-    document = models.FileField(upload_to='resume', null=True)
-
-    class Meta:
-        verbose_name='Applicant'
-        verbose_name_plural = 'Applicants'
-        
+    job = models.ForeignKey(Job, on_delete=models.CASCADE )
+    document = models.FileField(upload_to='resumes/%Y%m%d')
+    submissiondate = models.DateTimeField(auto_now=True)
 
 
     def __str__(self):
-        return self.name
+        return str(self.user)
+
+
+
+# class Application(models.Model):
+
+
+#     STATUS = (
+#         ('Pending', "Pending"),
+#         ('Passed', 'Passed'),
+#         ('Rejected', 'Rejected')
+#     )
+
+#     name = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+#     jobname = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='applicant', null=True)
+#     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+#     status = models.CharField(max_length=50, choices=STATUS, default=STATUS[0:1])
+
+
+#     class Meta:
+#         verbose_name='Application'
+#         verbose_name_plural = 'Applications'
+        
+
+
+#     def __str__(self):
+#         return self.name
 
 
 
@@ -102,3 +128,26 @@ class Note(models.Model):
     def __str__(self):
         return str(self.user)
 
+
+class ControlPanel(models.Model):
+
+    STATUS = (
+        ('Pending', "Pending"),
+        ('Passed', 'Passed'),
+        ('Rejected', 'Rejected')
+    )
+
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    Submitted = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=STATUS)
+    resume = models.ForeignKey(Note, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    class Meta:
+        verbose_name = "Control Panel"
+        verbose_name_plural = " Control Panels"
+
+
+    def __str__(self):
+        return str(self.applicant)

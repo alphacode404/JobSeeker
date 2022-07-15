@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %} | {{ job.name }} {% endblock %}
+
+<style>
+    .info-card{
+      font-size: 18px;
+      padding: 5px 0;
+    }
+
+    .job{
+      margin-top: 25px 0;
+    }
+
+    .job-name{
+      font-size: 23px;
+      color: rgb(192, 27, 27);
+    }
+
+    /* .job-location{}
+    .job-type{} */
+
+    .salary-time{
+      margin-bottom: 15px;
+    }
+
+    .job-salary,
+    .job-time{
+      border-radius: 3px;
+      display: inline-block;
+      padding: 3px 4px;}
+      
+    .job-salary{
+      border: solid 1px rgb(137, 243, 137);
+      background-color: rgb(137, 243, 137);
+      color: rgb(0, 88, 0);
+    }
+
+    .job-time{
+      border: solid 1px rgb(183, 189, 183);
+      background-color: rgb(183, 189, 183);
+      color: rgb(73, 73, 73);
+    }
+
+    .job-cred{
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .notes{
+      margin: 15px 0;
+      font-weight: 300;
+    }
+
+    .job-bttnz{
+      margin-bottom: 10px;
+      border: none;
+      padding: 3px 7px;
+      border-radius: 3px;
+      background-color: rgb(228, 152, 10);
+      color: white;
+    }
+
+    .job-bttnz:hover{
+      background-color: rgb(233, 184, 92);
+    }
+
+    .company{
+      display: flex;
+      font-weight: 600;
+      font-size: 22px;
+      justify-content: center;
+      align-items: center;
+    }
+    .company span{
+      font-weight: normal;
+      color: gray;
+      font-size: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .job-salary{
+        margin-bottom: 4px;
+      }
+    }
+
+  </style>
+
+{% block content %}
+
+ <div class="pagetitle">
+      <h1>Job Applications</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'login' %}">Home</a></li>
+          <li class="breadcrumb-item active">Application Page</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+             <div class="info-card">
+
+              <div class="job">
+                <div class="job-name">{{ jobs.name }}</div>
+                <div class="job-location">{{ jobs.location }}</div>
+                <div class="job-type">Remote</div>
+              </div>
+
+              <div class="salary-time">
+                <div class="job-salary">
+                  <i class="bx bx-money"></i>
+                  ${{ jobs.salary }} a year
+                </div>
+                
+                <div class="job-time">
+                  <i class="bx bxs-briefcase"></i>
+                  Full-time
+                </div>
+            </div>
+            <!-- <i class="bx bxs-home"></i> -->
+
+              <div class="job-cred">
+                <i class="bx bxs-hourglass"></i>
+                2 years experience in React
+              </div>
+              <div class="job-cred">
+                <i class="bx bx-award"></i>
+                Computer Science degree or degree from any related field
+              </div>
+              <div class="job-cred">
+                <i class="bx bxs-network-chart"></i>
+                Proficiency with Python will be considered
+              </div>
+
+              <div class="notes">
+                <div class="job-notes">
+                  Apply with an uptodate resume/cv
+                </div>
+                <div class="job-notes">
+                  Hiring multiple candidates
+                </div>
+                <div class="job-notes">
+                  Urgently hiring
+                </div>
+              </div> 
+
+              <button class="job-bttnz" >Submit CV</button>
+              <button  class="job-bttnz">Preview CV</button>
+
+              <div class="company">
+                <div class="job-company"> <span>from:</span> <a href="{{ company.website }}">{{ company.name }}</a></div>
+              </div>
+
+             </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+{% endblock %}

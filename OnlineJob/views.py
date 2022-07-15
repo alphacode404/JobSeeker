@@ -1,8 +1,9 @@
 from email.headerregistry import Group
+from multiprocessing import context
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Applicant, Job, Note, Profile
+from .models import Applicant, Company, ControlPanel, Job, Note, Profile
 
 from .forms import ProfileForm, RegisterForm
 from django.contrib import messages
@@ -21,6 +22,23 @@ def index(request):
     }
 
     return render(request, 'pages/index.html', context)
+
+
+
+@login_required(login_url='login')
+def jobdetial(request, job_id):
+
+    jobs = get_object_or_404(Job, pk=job_id)
+    company = get_object_or_404(Company, pk=job_id)
+
+    context = {
+        'jobs':jobs,
+        'company':company
+    }
+
+    return render(request, 'pages/jobdetail.html', context)
+
+
 
 
 
@@ -90,10 +108,6 @@ def loginuser(request):
 
 
 
-@login_required(login_url='login')
-def company(request):
-    return render(request, 'pages/company-index.html')
-
 
 @login_required(login_url='login')
 def profile(request):
@@ -118,21 +132,12 @@ def profile(request):
 def cv(request):
     return render(request, 'pages/cv.html')
 
-@login_required(login_url='login')
-def jobdetial(request):
-    return render(request, 'pages/jobdetail.html')
+
 
 
 @login_required(login_url='login')
 def note(request):
     return render(request, 'pages/note.html')
-
-
-
-
-@login_required(login_url='login')
-def applied(request):
-    return render(request, 'pages/applied.html')
 
 
 
@@ -187,3 +192,55 @@ def notedelete(request, pk):
     return render(request, 'pages/deletenote.html', context)
 
 
+
+
+
+@login_required(login_url='login')
+def company(request):
+
+    allapplicants = Applicant.objects.all()
+
+    context ={
+        'allapplicants': allapplicants
+    }
+
+    return render(request, 'pages/company-index.html', context)
+
+
+
+def applicantstatus(request):
+
+    form = ProfileForm()
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {
+        'form':form
+    }
+
+    return render(request, 'pages/company-index.html', context)
+
+
+
+@login_required(login_url="login")
+def jobresults(request):
+    
+    results = ControlPanel.objects.all().filter()
+    contect = {}
+
+    return render(request, 'pages/applied.html')
+
+
+@login_required(login_url='login')
+def joblist(request):
+    ''' all the jobs the applicant has applied'''
+    applicants = ControlPanel.objects.filter(applicant=request.user)
+
+    context = {
+        'applicants':applicants,
+    }
+
+    return render(request, 'pages/applied.html', context)

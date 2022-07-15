@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
 
@@ -7,7 +6,7 @@
     <h1>Applied Jobs</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
         <li class="breadcrumb-item active">Applied List</li>
       </ol>
     </nav>
@@ -19,22 +18,24 @@
 
         <div class="card">
           <div class="card-body">
-            <h5>Here is a list of Jobs that have been previously applied to</h5>
+            <h5 class="headf">Here is a list of Jobs that have been previously applied to</h5>
 
             <!-- Table with stripped rows -->
             <table class="table datatable">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Company</th>
                   <th>Position</th>
                   <th>Status</th>
                   <th>Files</th>
                 </tr>
               </thead>
               <tbody>
+              
                 <tr>
-                  <td>Brandon Jacob</td>
-                  <td>Designer</td>
+                  {% for applicant in applicants %}
+                  <td>{{ applicant.company}}</td>
+                  <td>{{ applicant.job }}</td>
                   <td><button class="button-job-status">Pending</button></td>
                   <td><button class="button-job-apply"><a href="applications.html">Download</a></button></td>
                 </tr>

@@ -37,3 +37,6 @@ class ProfileForm(forms.ModelForm):
 class NoteForm(forms.ModelForm):
     model = Note
     fields = ('company', 'position', 'date', 'text', 'document')
+
+
+
